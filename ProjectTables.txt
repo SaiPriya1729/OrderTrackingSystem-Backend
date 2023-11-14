@@ -1,0 +1,103 @@
+
+create database Project
+
+use project
+<---------CUSTOMER TABLE CREATION---------->
+create table Customer(Customer_Id int constraint customer_pk  primary key identity(100,1),Customer_Name varchar(15) constraint Customer_name not null,
+                    Email VARCHAR(20) CONSTRAINT customer_email not null unique  CHECK (
+        Email LIKE '%@%.%'
+        AND LEN(Email) <= 20
+    ) ,Mobile varchar(10) constraint Customer_mobile_chk  
+                     CHECK (LEN(mobile) = 10 AND mobile LIKE '[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'));
+
+insert into Customer values('John','John@gmail.com','9908809090');
+insert into Customer values('Anne','Anne@gmail.com','8989809090');
+insert into Customer values('Salmon','Salmon@gmail.com','7898809090');
+insert into Customer values('Michael','Michael@gmail.com','6789809090');
+insert into Customer values('Seetal','Seetal@gmail.com','9908897090');
+
+<------PRODUCT TABLE CREATION----------->
+create table Product(Product_Id varchar(10) constraint product_pk PRIMARY key,
+Product_Name varchar(15) constraint Product_name not null, Description VARCHAR(MAX) 
+        CONSTRAINT Description_length_chk CHECK (LEN(Description) <= 100)  ,
+                    Price money constraint product_price_chk check(price>=0)
+                    );
+insert into Product values('L302','Laptop','HP laptop,8GB RAM, SSD',500.00);
+insert into Product values('S205','Smart Phone','Fast performance for multitasking',400.00);
+insert into Product values('C506','Digital Camera','Compact 20MP camera, 5x zoom',900.00);
+insert into Product values('D809','Desk Chair ','Ergonomic,adjustable chair',500.00);
+insert into Product values('R600','Running shoes ','Lightweight,breathable shoes',200.00);
+insert into Product values('J890','Jeans ','Stylish,durable denim jeans',450.00);
+
+<---------ORDERS TABLE CREATION--------->
+create table Orders(Order_Id VARCHAR(10) constraint order_pk PRIMARY key,
+    Order_Date date,
+    Customer_Id int CONSTRAINT Order_customer_id_fk references Customer(Customer_id) ON DELETE CASCADE,
+    status char(1) check(status in('N','D','C')),Delivery_Date date);
+ 
+insert into orders values ('ORD11','2023-03-12',100,'N','2023-03-22' );
+insert into orders values ('ORD21','2023/9/22',101,'D','2023/9/30' );
+insert into orders values ('ORD22','2023/10/18',101,'C',NULL );
+insert into orders values ('ORD31','2023/9/22',102,'D','2023/9/28' );
+insert into orders values ('ORD32','2023/8/9',102,'N','2023/9/1' );
+insert into orders values ('ORD33','2023/8/9',102,'N','2023/9/3' );
+insert into orders values ('ORD41','2023/7/11',103,'D','2023/7/21' );
+insert into orders values ('ORD51','2023/7/21',104,'C',NULL );
+insert into orders values ('ORD52','2023/5/5',104,'D','2023/5/10' );
+insert into orders values ('ORD23','2023/7/8',101,'N','2023/7/13' );
+
+<-------ORDER-ITEMS TABLE CREATION------->
+create table Order_Items(Order_Id VARCHAR(10) CONSTRAINT order_items_order_id_fk references Orders(Order_id),
+    Product_Id varchar(10) CONSTRAINT order_items_prod_id_fk references Product(Product_id) ON DELETE CASCADE,
+    Qty int constraint order_items_qty_chk check(qty > 0 ), Price money constraint order_items_price check (Price>=0));
+    select * from Order_Items
+insert into order_items values ('ORD11','L302',1,500.00)
+insert into order_items values ('ORD21','S205',2,800.00)
+insert into order_items values ('ORD22','C506',4,3600.00)
+insert into order_items values ('ORD31','D809',5,2500.00)
+insert into order_items values ('ORD32','R600',2,400.00)
+insert into order_items values ('ORD33','J890',1,450.00)
+insert into order_items values ('ORD41','L302',2,1000.00)
+insert into order_items values ('ORD52','S205',3,1200.00)
+insert into order_items values ('ORD23','C506',3,2700.00)
+insert into order_items values ('ORD51','R600',4,800.00)
+insert into order_items values ('ORD11','C506',3,2700.00)
+insert into order_items values ('ORD22','S205',3,1200.00)
+insert into order_items values ('ORD22','J890',1,450.00)
+insert into order_items values ('ORD32','S205',3,1200.00)
+insert into order_items values ('ORD33','R600',4,800.00)
+insert into order_items values ('ORD41','C506',3,2700.00)
+insert into order_items values ('ORD41','J890',1,450.00)
+insert into order_items values ('ORD41','C506',3,2700.00)
+insert into order_items values ('ORD51','D809',5,2500.00)
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+drop table Product
+drop table customer
+drop table Order_Items
+drop table Orders
+SELECT* from Product
+select * from Order_Items
+select * from Orders
+select * from customer

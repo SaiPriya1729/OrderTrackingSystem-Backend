@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Test Project</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script>
+		function getCustomers() {
+			$.ajax({
+				type: "GET",
+				url: "http://localhost:8888/customers",
+				headers: {
+					"Authorization": "Basic " + btoa("priya:priya")
+				},
+				success: function (result) {
+					// Convert the result to a string
+					var resultString = JSON.stringify(result);
+
+					// Display the result as a string in an alert
+					alert(resultString);
+				}
+			});
+		}
+	</script>
+
+</head>
+
+<body>
+	<h1>Spring Client</h1>
+	<button onclick="getCustomers()">Get Customers</button>
+</body>
+
+</html>
